@@ -1,0 +1,28 @@
+{
+    "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
+    "name": "isotropy-backend-mongodb",
+    "version": "0.0.1",
+    "description": "MongoDb backend for Isotropy.",
+    "scripts": {
+        "test": "mocha dist/test/test.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jeswin/isotropy-backend-mongodb.git"
+    },
+    "main": "dist/isotropy-backend-mongodb",
+    "license": "MIT",
+    "dependencies": {
+    },
+    "devDependencies": {
+        "babel-polyfill": "*",
+        "babel-preset-es2015": "*",
+        "babel-preset-react": "*",
+        "babel-preset-stage-2": "*",
+        "babel-plugin-transform-class-properties": "*",
+        "mocha": "*",
+        "should": "*"
+    },
+    "keywords": ["mongodb", "isotropy", "isomorphic"],
+    "license" : "MIT"
+}
