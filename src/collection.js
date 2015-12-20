@@ -1,13 +1,16 @@
 /* @flow */
 import promisify from 'nodefunc-promisify';
 import Cursor from "./cursor";
+import type { MongoCollectionType } from "./flow/mongodb-types";
 
 class Collection {
+    underlying: MongoCollectionType;
+
     constructor(underlying: MongoCollectionType) {
         this.underlying = underlying;
     }
 
-    async find() {
+    async find() : Promise<Cursor> {
         const fn = promisify(this.underlying.find);
         var cursor = await fn.apply(this.underlying, arguments);
         return new Cursor(cursor);

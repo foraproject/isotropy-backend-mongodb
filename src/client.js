@@ -7,9 +7,9 @@ const NativeComponent = MongoDb.MongoClient;
 const connect = promisify(NativeComponent.connect);
 
 class Client {
-    static async connect(connectionString: string) : Db {
+    static async connect(connectionString: string) : Promise<Db> {
         const db = await connect.call(NativeComponent, connectionString);
-        return new Db(_db);
+        return new Db(db);
     }
 }
 

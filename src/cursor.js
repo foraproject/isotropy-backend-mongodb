@@ -1,9 +1,16 @@
 /* @flow */
 import promisify from 'nodefunc-promisify';
+import type { MongoCursorType } from "./flow/mongodb-types";
 
 class Cursor {
-    constructor(underlying: MongoCollectionType) {
+    underlying: MongoCursorType;
+
+    constructor(underlying: MongoCursorType) {
         this.underlying = underlying;
+    }
+
+    limit() {
+        
     }
 }
 

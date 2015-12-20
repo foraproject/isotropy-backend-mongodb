@@ -1,7 +1,7 @@
 {
     "author": "Jeswin Kumar <jeswinpk@agilehead.com>",
     "name": "isotropy-backend-mongodb",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "MongoDb backend for Isotropy.",
     "scripts": {
         "test": "mocha dist/test/test.js"
@@ -13,6 +13,8 @@
     "main": "dist/isotropy-backend-mongodb",
     "license": "MIT",
     "dependencies": {
+        "mongodb": "*",
+        "nodefunc-promisify": "*"
     },
     "devDependencies": {
         "babel-polyfill": "*",
