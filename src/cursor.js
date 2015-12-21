@@ -19,7 +19,7 @@ class Cursor {
         return await _toArray.call(this.underlying);
     }
 
-    async count() : number {
+    async count() : Promise<number> {
         return await _count.call(this.underlying);
     }
 
