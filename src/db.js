@@ -3,7 +3,7 @@ import promisify from 'nodefunc-promisify';
 import MongoDb from "mongodb";
 import Collection from "./collection";
 
-const _collection = promisify(MongoDb.Db.prototype.collection);
+const _collection = MongoDb.Db.prototype.collection;
 const _dropDatabase = promisify(MongoDb.Db.prototype.dropDatabase);
 const _close = promisify(MongoDb.Db.prototype.close);
 
@@ -14,9 +14,9 @@ class Db {
         this.underlying = underlying;
     }
 
-    async collection(name: string) : Promise<Collection> {
-        const collection = await _collection.call(this.underlying, name);
-        return new Collection(collection);
+    collection(name: string) : Collection {
+        const m_collection = _collection.call(this.underlying, name);
+        return new Collection(m_collection);
     }
 
     async dropDatabase() : Promise {
