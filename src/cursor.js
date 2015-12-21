@@ -1,40 +1,37 @@
 /* @flow */
 import promisify from 'nodefunc-promisify';
-import type { MongoCursorType } from "./flow/mongodb-types";
+import MongoDb from "mongodb";
+
+const _toArray = promisify(MongoDb.Cursor.prototype.toArray);
+const _limit = MongoDb.Cursor.prototype.limit;
+const _skip = MongoDb.Cursor.prototype.skip;
+const _sort = MongoDb.Cursor.prototype.sort;
 
 class Cursor {
-    underlying: MongoCursorType;
+    underlying: MongoDb.Cursor;
 
-    constructor(underlying: MongoCursorType) {
+    constructor(underlying: MongoDb.Cursor) {
         this.underlying = underlying;
     }
 
-    limit() {
-        
+    async toArray() : Promise<Array<Object>> {
+        return await _toArray.call(this.underlying);
+    }
+
+    limit(n: number) : Cursor {
+        var cursor = _limit.call(this.underlying, n);
+        return new Cursor(cursor);
+    }
+
+    skip(n: number) : Cursor {
+        var cursor = _skip.call(this.underlying, n);
+        return new Cursor(cursor);
+    }
+
+    sort(keys: string | Array<Object> | Object) : Cursor {
+        var cursor = _sort.call(this.underlying, keys);
+        return new Cursor(cursor);
     }
 }
-
-const syncMethods = [
-    "limit",
-    "skip",
-    "sort"
-];
-
-syncMethods.forEach(function(methodName) {
-    Cursor.prototype[methodName] = function() {
-        var cursor = this.underlying[methodName].apply(this.underlying, arguments);
-        return new Cursor(cursor);
-    };
-});
-
-var asyncMethods = [
-    "toArray"
-];
-asyncMethods.forEach(function(methodName) {
-    Cursor.prototype[methodName] = async function() {
-        var fn = promisify(this.underlying[methodName]);
-        return await fn.apply(this.underlying, arguments);
-    };
-});
 
 export default Cursor;

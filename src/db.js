@@ -2,31 +2,29 @@
 import promisify from 'nodefunc-promisify';
 import MongoDb from "mongodb";
 import Collection from "./collection";
-import type { MongoDbType, MongoDbObjectID } from "./flow/mongodb-types";
+
+const _collection = promisify(MongoDb.Db.prototype.collection);
+const _dropDatabase = promisify(MongoDb.Db.prototype.dropDatabase);
+const _close = promisify(MongoDb.Db.prototype.close);
 
 class Db {
-    underlying: MongoDbType;
-    ObjectID: MongoDbObjectID;
+    underlying: MongoDb.Db;
 
-    constructor(underlying: MongoDbType) {
+    constructor(underlying: MongoDb.Db) {
         this.underlying = underlying;
-        this.ObjectID = MongoDb.ObjectID;
     }
 
-    async collection() : Promise<Collection> {
-        const fn = promisify(this.underlying.collection);
-        const collection = await fn.apply(this.underlying, arguments);
+    async collection(name: string) : Promise<Collection> {
+        const collection = await _collection.call(this.underlying, name);
         return new Collection(collection);
     }
 
     async dropDatabase() : Promise {
-        const fn = promisify(this.underlying.dropDatabase);
-        await fn.call(this.underlying);
+        await _dropDatabase.call(this.underlying);
     }
 
     async close() : Promise {
-        const fn = promisify(this.underlying.close);
-        await fn.call(this.underlying);
+        await _close.call(this.underlying);
     }
 }
 
