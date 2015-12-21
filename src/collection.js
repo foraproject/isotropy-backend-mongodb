@@ -2,7 +2,6 @@
 import promisify from 'nodefunc-promisify';
 import Cursor from "./cursor";
 import MongoDb from "mongodb";
-import type MongoDbTypes from "mongodb";
 
 const _count = promisify(MongoDb.Collection.prototype.count);
 const _createIndex = promisify(MongoDb.Collection.prototype.createIndex);
