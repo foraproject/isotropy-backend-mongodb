@@ -1,6 +1,6 @@
 /* @flow */
 export type CountOptionsType = {
-    limit?: boolean;
+    limit?: number;
     skip?: number
 };
 

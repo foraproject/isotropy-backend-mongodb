@@ -1,7 +1,7 @@
 declare module "mongodb" {
 
     declare type CountOptionsType = {
-        limit?: boolean;
+        limit?: number;
         skip?: number
     };
 
