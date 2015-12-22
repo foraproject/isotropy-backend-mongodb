@@ -9,7 +9,9 @@ import type {
 
 const _toArray: AsyncFunc<Array<Object>> = promisify(MongoDb.Cursor.prototype.toArray);
 const _count: AsyncFunc<number> = promisify(MongoDb.Cursor.prototype.count);
+const _hasNext: AsyncFunc<boolean> = promisify(MongoDb.Cursor.prototype.hasNext);
 const _limit = MongoDb.Cursor.prototype.limit;
+const _next: AsyncFunc<Object> = promisify(MongoDb.Cursor.prototype.next);
 const _skip = MongoDb.Cursor.prototype.skip;
 const _sort = MongoDb.Cursor.prototype.sort;
 
@@ -28,9 +30,17 @@ class Cursor {
         return await _count.call(this.underlying);
     }
 
+    async hasNext() : Promise<boolean> {
+        return await _hasNext.call(this.underlying);
+    }
+
     limit(n: number) : Cursor {
         const cursor = _limit.call(this.underlying, n);
         return new Cursor(cursor);
+    }
+
+    async next() : Promise<Object> {
+        return await _next.call(this.underlying);
     }
 
     skip(n: number) : Cursor {

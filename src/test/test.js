@@ -45,7 +45,7 @@ describe("Isotropy MongoDb Backend", () => {
 
 
     describe("Collection", () => {
-        it("Must open a database", async () => {
+        it("Open a database", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             db.should.not.be.empty();
         });
@@ -108,7 +108,7 @@ describe("Isotropy MongoDb Backend", () => {
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
             await collection.createIndex({a: 1, b: 1});
             await collection.createIndex({b: 1});
-            await collection.dropAllIndexes();
+            await collection.dropIndexes();
             const indexes = await collection.indexes();
             indexes.length.should.equal(1);
         });
@@ -126,7 +126,7 @@ describe("Isotropy MongoDb Backend", () => {
         });
 
 
-        it("Find must return a cursor", async () => {
+        it("Return a cursor", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
@@ -140,7 +140,8 @@ describe("Isotropy MongoDb Backend", () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            const result = await collection.findOne({a: 1});
+            const cursor = collection.find({a: 1}).limit(1);
+            const result = await cursor.next();
             result.a.should.equal(1);
         });
 
@@ -177,33 +178,13 @@ describe("Isotropy MongoDb Backend", () => {
         });
 
 
-        it("Remove an item", async () => {
-            const db = await Driver.MongoClient.connect(CONN_STR);
-            const collection = db.collection("test");
-            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            await collection.removeOne({a: 1});
-            await collection.removeOne({a: 1});
-            const count = await collection.count();
-            count.should.equal(3);
-        });
-
-
-        it("Remove many items", async () => {
-            const db = await Driver.MongoClient.connect(CONN_STR);
-            const collection = db.collection("test");
-            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            await collection.removeMany({a: 1});
-            const count = await collection.count();
-            count.should.equal(1);
-        });
-
-
         it("Update an item", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
             await collection.updateOne({a: 1}, {$set: {a: 20}});
-            const result = await collection.findOne({a: 20});
+            const cursor = collection.find({a: 20}).limit(1);
+            const result = await cursor.next();
             result.a.should.equal(20);
         });
 
@@ -229,13 +210,22 @@ describe("Isotropy MongoDb Backend", () => {
             result.length.should.equal(4);
         });
 
-        it("Count items in cursor", async () => {
+        it("Count items", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
             const cursor = collection.find({a: 1});
             const count = await cursor.count();
             count.should.equal(4);
+        });
+
+        it("Check if there is a next item", async () => {
+            const db = await Driver.MongoClient.connect(CONN_STR);
+            const collection = db.collection("test");
+            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
+            const cursor = collection.find({a: 1});
+            const hasNext = await cursor.hasNext();
+            hasNext.should.be.true();
         });
 
         it("Limit results", async () => {
@@ -246,6 +236,15 @@ describe("Isotropy MongoDb Backend", () => {
             cursor.limit(2);
             const result = await cursor.toArray();
             result.length.should.equal(2);
+        });
+
+        it("Get the next item", async () => {
+            const db = await Driver.MongoClient.connect(CONN_STR);
+            const collection = db.collection("test");
+            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
+            const cursor = collection.find({a: 1});
+            const result = await cursor.next();
+            result.a.should.equal(1);
         });
 
         it("Skip results", async () => {
@@ -270,7 +269,4 @@ describe("Isotropy MongoDb Backend", () => {
             result[0].a.should.equal(2);
         });
     });
-
-
-
 })
