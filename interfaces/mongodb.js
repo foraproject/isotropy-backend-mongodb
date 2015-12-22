@@ -41,7 +41,7 @@ declare module "mongodb" {
         dropIndexes(cb: (err?: Error) => void) : void;
         dropIndex(name: string, cb: (err?: Error) => void) : void;
         find(query: Object) : Cursor;
-        indexes(cb: (err?: Error, result: Object) => void) : void;
+        indexes(cb: (err?: Error, result: Array<Object>) => void) : void;
         insertOne(doc: Object, cb: (err?: Error, result: { insertedId: string }) => void) : void;
         insertMany(docs: Array<Object>, cb: (err?: Error, result: { insertedIds: Array<string>}) => void) : void;
         updateOne(selector: Object, update: Object, cb: (err?: Error) => void) : void;

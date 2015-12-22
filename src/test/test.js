@@ -162,7 +162,7 @@ describe("Isotropy MongoDb Backend", () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            await collection.createIndex({a: 1, b: 1});
+            await collection.createIndex({a: 1, b: -1});
             await collection.createIndex({b: 1});
             const indexes = await collection.indexes();
             indexes.length.should.equal(3);

@@ -21,7 +21,7 @@ const _drop: AsyncAction = promisify(MongoDb.Collection.prototype.drop);
 const _dropIndexes: AsyncAction = promisify(MongoDb.Collection.prototype.dropIndexes);
 const _dropIndex: AsyncAction1<string> = promisify(MongoDb.Collection.prototype.dropIndex);
 const _find = MongoDb.Collection.prototype.find;
-const _indexes: AsyncFunc<Object> = promisify(MongoDb.Collection.prototype.indexes);
+const _indexes: AsyncFunc<Array<Object>> = promisify(MongoDb.Collection.prototype.indexes);
 const _insertMany: AsyncFunc1<Array<Object>, { insertedIds: Array<string> }> = promisify(MongoDb.Collection.prototype.insertMany);
 const _updateOne: AsyncAction2<Object, Object> = promisify(MongoDb.Collection.prototype.updateOne);
 const _updateMany: AsyncFunc2<Object, Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.updateMany);
@@ -69,7 +69,7 @@ class Collection {
         return new Cursor(cursor);
     }
 
-    async indexes(indexes: Object) : Promise<Object> {
+    async indexes(indexes: Object) : Promise<Array<Object>> {
         return await _indexes.call(this.underlying);
     }
 
