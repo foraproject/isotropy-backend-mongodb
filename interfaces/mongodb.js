@@ -36,7 +36,7 @@ declare module "mongodb" {
         limit(n: number) : Cursor;
         next(cb: (err?: Error, result: Object) => void) : void;
         skip(n: number) : Cursor;
-        sort(keys: string | Array<any> | Object) : Cursor;
+        sort(keys: Array<Array<string|number>>) : Cursor;
     }
 
     declare class Collection {

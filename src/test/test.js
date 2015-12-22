@@ -274,11 +274,10 @@ describe("Isotropy MongoDb Backend", () => {
             const collection = db.collection("test");
             await collection.createIndex({a: 1});
             await collection.createIndex({a: -1});
-            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            const cursor = collection.find();
-            var x = cursor.sort([['a', -1]]);
-            const result = await x.toArray();
-            result[0].a.should.equal(2);
+            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 100}, {a: 2}]);
+            const cursor = collection.find().sort([['a', -1]]);
+            const result = await cursor.toArray();
+            result[0].a.should.equal(100);
         });
     });
 });

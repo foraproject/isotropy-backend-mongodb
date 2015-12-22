@@ -48,7 +48,7 @@ class Cursor {
         return new Cursor(cursor);
     }
 
-    sort(keys: string | Array<any> | Object) : Cursor {
+    sort(keys: Array<Array<string|number>>) : Cursor {
         const cursor = _sort.call(this.underlying, keys);
         return new Cursor(cursor);
     }
