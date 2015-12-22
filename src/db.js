@@ -3,9 +3,14 @@ import promisify from 'nodefunc-promisify';
 import MongoDb from "mongodb";
 import Collection from "./collection";
 
+import type {
+    AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
+    AsyncFunc, AsyncFunc1, AsyncFunc2, AsyncFunc3, AsyncFunc4, AsyncFunc5, AsyncFunc6
+} from 'nodefunc-promisify';
+
 const _collection = MongoDb.Db.prototype.collection;
-const _dropDatabase = promisify(MongoDb.Db.prototype.dropDatabase);
-const _close = promisify(MongoDb.Db.prototype.close);
+const _dropDatabase: AsyncAction = promisify(MongoDb.Db.prototype.dropDatabase);
+const _close: AsyncAction = promisify(MongoDb.Db.prototype.close);
 
 class Db {
     underlying: MongoDb.Db;

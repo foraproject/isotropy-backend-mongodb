@@ -12,41 +12,47 @@ declare module "mongodb" {
         skip?: number
     }
 
+    declare type QueryResultType = {
+        result: {
+            n: number
+        }
+    }
+
     declare class Db {
         collection(name: string) : Collection;
-        dropDatabase() : Promise;
-        close() : Promise;
+        dropDatabase(cb: (err?: Error) => void) : void;
+        close(cb: (err?: Error) => void) : void;
     }
 
     declare class MongoClient {
         constructor(serverConfig: any, options: any) : void;
-        static connect(uri: string): Promise<Db>;
+        static connect(uri: string, cb: (err?: Error, db: Db) => void) : void;
     }
 
     declare class Cursor {
-        toArray() : Promise<Array<Object>>;
-        count(): Promise<number>;
+        toArray(cb: (err?: Error, result: Array<Object>) => void) : void;
+        count(cb: (err?: Error, result: number) => void) : void;
         limit(n: number) : Cursor;
         skip(n: number) : Cursor;
         sort(keys: string | Array<any> | Object) : Cursor;
     }
 
     declare class Collection {
-        count(query: Object, options: CountOptionsType) : Promise<number>;
-        createIndex(field: string) : Promise;
-        deleteOne(filter: Object) : Promise;
-        deleteMany(filter: Object) : Promise<number>;
-        drop() : Promise<Collection>;
-        dropAllIndexes() : Promise;
-        dropIndex(name: string) : Promise;
+        count(query: Object, options: CountOptionsType, cb: (err?: Error, result: number) => void) : void;
+        createIndex(field: string, cb: (err?: Error) => void) : void;
+        deleteOne(filter: Object, cb: (err?: Error) => void) : void;
+        deleteMany(filter: Object, cb: (err?: Error, result: QueryResultType) => void) : void;
+        drop(cb: (err?: Error) => void) : void;
+        dropAllIndexes(cb: (err?: Error) => void) : void;
+        dropIndex(name: string, cb: (err?: Error) => void) : void;
         find(query: Object) : Cursor;
-        findOne(query: Object, options: FindOneOptionsType) : Promise<Object>;
-        indexes() : Promise<Object>;
-        insertOne(doc: Object) : Promise<string>;
-        insertMany() : Promise<Array<string>>;
-        removeOne(query: Object) : Promise;
-        removeMany(query: Array<Object>) : Promise<number>;
-        updateOne(selector: Object, update: Object) : Promise;
-        updateMany(selector: Object, update: Object) : Promise<number>;
+        findOne(query: Object, options: FindOneOptionsType, cb: (err?: Error, result: Object) => void) : void;
+        indexes(cb: (err?: Error, result: Object) => void) : void;
+        insertOne(doc: Object, cb: (err?: Error, result: { insertedId: string }) => void) : void;
+        insertMany(docs: Array<Object>, cb: (err?: Error, result: { insertedIds: Array<string>}) => void) : void;
+        removeOne(query: Object, cb: (err?: Error) => void) : void;
+        removeMany(query: Object, cb: (err?: Error, result: QueryResultType) => void) : void;
+        updateOne(selector: Object, update: Object, cb: (err?: Error) => void) : void;
+        updateMany(selector: Object, update: Object, cb: (err?: Error, result: QueryResultType) => void) : void;
     }
 }

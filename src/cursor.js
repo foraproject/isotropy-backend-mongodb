@@ -2,8 +2,13 @@
 import promisify from 'nodefunc-promisify';
 import MongoDb from "mongodb";
 
-const _toArray = promisify(MongoDb.Cursor.prototype.toArray);
-const _count = MongoDb.Cursor.prototype.count;
+import type {
+    AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
+    AsyncFunc, AsyncFunc1, AsyncFunc2, AsyncFunc3, AsyncFunc4, AsyncFunc5, AsyncFunc6
+} from 'nodefunc-promisify';
+
+const _toArray: AsyncFunc<Array<Object>> = promisify(MongoDb.Cursor.prototype.toArray);
+const _count: AsyncFunc<number> = promisify(MongoDb.Cursor.prototype.count);
 const _limit = MongoDb.Cursor.prototype.limit;
 const _skip = MongoDb.Cursor.prototype.skip;
 const _sort = MongoDb.Cursor.prototype.sort;

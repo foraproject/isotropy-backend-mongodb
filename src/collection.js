@@ -1,25 +1,4 @@
 /* @flow */
-import promisify from 'nodefunc-promisify';
-import Cursor from "./cursor";
-import MongoDb from "mongodb";
-
-const _count = promisify(MongoDb.Collection.prototype.count);
-const _createIndex = promisify(MongoDb.Collection.prototype.createIndex);
-const _deleteOne = promisify(MongoDb.Collection.prototype.deleteOne);
-const _deleteMany = promisify(MongoDb.Collection.prototype.deleteMany);
-const _drop = promisify(MongoDb.Collection.prototype.drop);
-const _dropAllIndexes = promisify(MongoDb.Collection.prototype.dropAllIndexes);
-const _dropIndex = promisify(MongoDb.Collection.prototype.dropIndex);
-const _find = MongoDb.Collection.prototype.find;
-const _findOne = promisify(MongoDb.Collection.prototype.findOne);
-const _indexes = promisify(MongoDb.Collection.prototype.indexes);
-const _insertOne = promisify(MongoDb.Collection.prototype.insertOne);
-const _insertMany = promisify(MongoDb.Collection.prototype.insertMany);
-const _removeOne = promisify(MongoDb.Collection.prototype.removeOne);
-const _removeMany = promisify(MongoDb.Collection.prototype.removeMany);
-const _updateOne = promisify(MongoDb.Collection.prototype.updateOne);
-const _updateMany = promisify(MongoDb.Collection.prototype.updateMany);
-
 export type CountOptionsType = {
     limit?: boolean;
     skip?: number
@@ -31,6 +10,32 @@ export type FindOneOptionsType = {
     fields?: Object,
     skip?: number
 }
+
+import type {
+    AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
+    AsyncFunc, AsyncFunc1, AsyncFunc2, AsyncFunc3, AsyncFunc4, AsyncFunc5, AsyncFunc6
+} from 'nodefunc-promisify';
+
+import promisify from 'nodefunc-promisify';
+import Cursor from "./cursor";
+import MongoDb from "mongodb";
+
+const _count: AsyncFunc2<Object, CountOptionsType, number> = promisify(MongoDb.Collection.prototype.count);
+const _createIndex: AsyncAction1<string> = promisify(MongoDb.Collection.prototype.createIndex);
+const _deleteOne: AsyncAction1<Object> = promisify(MongoDb.Collection.prototype.deleteOne);
+const _deleteMany: AsyncFunc1<Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.deleteMany);
+const _drop: AsyncAction = promisify(MongoDb.Collection.prototype.drop);
+const _dropAllIndexes: AsyncAction = promisify(MongoDb.Collection.prototype.dropAllIndexes);
+const _dropIndex: AsyncAction1<string> = promisify(MongoDb.Collection.prototype.dropIndex);
+const _find = MongoDb.Collection.prototype.find;
+const _findOne: AsyncFunc2<Object, FindOneOptionsType, Object> = promisify(MongoDb.Collection.prototype.findOne);
+const _indexes: AsyncFunc<Object> = promisify(MongoDb.Collection.prototype.indexes);
+const _insertOne: AsyncFunc1<Object, { insertedId: string }> = promisify(MongoDb.Collection.prototype.insertOne);
+const _insertMany: AsyncFunc1<Array<Object>, { insertedIds: Array<string> }> = promisify(MongoDb.Collection.prototype.insertMany);
+const _removeOne: AsyncAction1<Object> = promisify(MongoDb.Collection.prototype.removeOne);
+const _removeMany: AsyncFunc1<Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.removeMany);
+const _updateOne: AsyncAction2<Object, Object> = promisify(MongoDb.Collection.prototype.updateOne);
+const _updateMany: AsyncFunc2<Object, Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.updateMany);
 
 class Collection {
     underlying: MongoDb.Collection;
@@ -53,7 +58,7 @@ class Collection {
     }
 
     async deleteMany(filter: Object) : Promise<number> {
-        const { result: { ok, n } } = await _deleteMany.call(this.underlying, filter);
+        const { result: { n } } = await _deleteMany.call(this.underlying, filter);
         return n;
     }
 
@@ -90,15 +95,15 @@ class Collection {
     }
 
     async insertMany(docs: Array<Object>) : Promise<Array<string>> {
-        const result = await _insertMany.call(this.underlying, docs);
-        return result.insertedIds.map(id => id.toString());
+        const { insertedIds } = await _insertMany.call(this.underlying, docs);
+        return insertedIds.map(id => id.toString());
     }
 
     async removeOne(query: Object) : Promise {
         await _removeOne.call(this.underlying, query);
     }
 
-    async removeMany(query: Array<Object>) : Promise<number> {
+    async removeMany(query: Object) : Promise<number> {
         const { result: { n } } = await _removeMany.call(this.underlying, query);
         return n;
     }
