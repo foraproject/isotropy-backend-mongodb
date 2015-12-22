@@ -146,7 +146,7 @@ describe("Isotropy MongoDb Backend", () => {
         });
 
 
-        it("Find speific fields in one item", async () => {
+        it("Find specific fields in one item", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
             await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2, x: 20, y: 30}]);
