@@ -139,10 +139,22 @@ describe("Isotropy MongoDb Backend", () => {
         it("Find one item", async () => {
             const db = await Driver.MongoClient.connect(CONN_STR);
             const collection = db.collection("test");
-            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2}]);
-            const cursor = collection.find({a: 1}).limit(1);
+            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2, x: 20, y: 30}]);
+            const cursor = collection.find({a: 2}).limit(1);
             const result = await cursor.next();
-            result.a.should.equal(1);
+            result.a.should.equal(2);
+        });
+
+
+        it("Find speific fields in one item", async () => {
+            const db = await Driver.MongoClient.connect(CONN_STR);
+            const collection = db.collection("test");
+            await collection.insertMany([{a: 1}, {a: 1}, {a: 1}, {a: 1}, {a: 2, x: 20, y: 30}]);
+            const cursor = collection.find({a: 2}, {x: 1, y: 1}).limit(1);
+            const result = await cursor.next();
+            Object.keys(result).length.should.equal(3);
+            result.x.should.equal(20);
+            result.y.should.equal(30);
         });
 
 
@@ -269,4 +281,4 @@ describe("Isotropy MongoDb Backend", () => {
             result[0].a.should.equal(2);
         });
     });
-})
+});
