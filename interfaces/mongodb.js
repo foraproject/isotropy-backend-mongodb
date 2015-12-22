@@ -5,13 +5,6 @@ declare module "mongodb" {
         skip?: number
     };
 
-    declare type FindOneOptionsType = {
-        limit?: number,
-        sort?: Array<Object> | Object,
-        fields?: Object,
-        skip?: number
-    }
-
     declare type QueryResultType = {
         result: {
             n: number

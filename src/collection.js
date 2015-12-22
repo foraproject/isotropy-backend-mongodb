@@ -4,13 +4,6 @@ export type CountOptionsType = {
     skip?: number
 };
 
-export type FindOneOptionsType = {
-    limit?: number,
-    sort?: Array<Object> | Object,
-    fields?: Object,
-    skip?: number
-}
-
 import type {
     AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
     AsyncFunc, AsyncFunc1, AsyncFunc2, AsyncFunc3, AsyncFunc4, AsyncFunc5, AsyncFunc6
