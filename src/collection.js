@@ -22,6 +22,7 @@ const _dropIndexes: AsyncAction = promisify(MongoDb.Collection.prototype.dropInd
 const _dropIndex: AsyncAction1<string> = promisify(MongoDb.Collection.prototype.dropIndex);
 const _find = MongoDb.Collection.prototype.find;
 const _indexes: AsyncFunc<Array<Object>> = promisify(MongoDb.Collection.prototype.indexes);
+const _insertOne: AsyncFunc1<Object, { insertedId: string }> = promisify(MongoDb.Collection.prototype.insertOne);
 const _insertMany: AsyncFunc1<Array<Object>, { insertedIds: Array<string> }> = promisify(MongoDb.Collection.prototype.insertMany);
 const _updateOne: AsyncAction2<Object, Object> = promisify(MongoDb.Collection.prototype.updateOne);
 const _updateMany: AsyncFunc2<Object, Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.updateMany);
@@ -74,8 +75,8 @@ class Collection {
     }
 
     async insertOne(doc: Object) : Promise<string> {
-        const ids = await this.insertMany([doc]);
-        return ids[0];
+        const { insertedId } = await _insertOne.call(this.underlying, doc);
+        return insertedId;
     }
 
     async insertMany(docs: Array<Object>) : Promise<Array<string>> {
