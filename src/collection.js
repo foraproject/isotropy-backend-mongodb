@@ -5,7 +5,7 @@ export type CountOptionsType = {
 };
 
 import type {
-  AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
+  //AsyncAction, AsyncAction1, AsyncAction2, AsyncAction3, AsyncAction4, AsyncAction5, AsyncAction6,
   AsyncFunc, AsyncFunc1, AsyncFunc2, AsyncFunc3, AsyncFunc4, AsyncFunc5, AsyncFunc6
 } from 'nodefunc-promisify';
 
@@ -14,17 +14,17 @@ import Cursor from "./cursor";
 import MongoDb from "mongodb";
 
 const _count: AsyncFunc2<Object, CountOptionsType, number> = promisify(MongoDb.Collection.prototype.count);
-const _createIndex: AsyncAction1<Object> = promisify(MongoDb.Collection.prototype.createIndex);
-const _deleteOne: AsyncAction1<Object> = promisify(MongoDb.Collection.prototype.deleteOne);
+const _createIndex: AsyncFunc1<Object, void> = promisify(MongoDb.Collection.prototype.createIndex);
+const _deleteOne: AsyncFunc1<Object, void> = promisify(MongoDb.Collection.prototype.deleteOne);
 const _deleteMany: AsyncFunc1<Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.deleteMany);
-const _drop: AsyncAction = promisify(MongoDb.Collection.prototype.drop);
-const _dropIndexes: AsyncAction = promisify(MongoDb.Collection.prototype.dropIndexes);
-const _dropIndex: AsyncAction1<string> = promisify(MongoDb.Collection.prototype.dropIndex);
+const _drop: AsyncFunc<void> = promisify(MongoDb.Collection.prototype.drop);
+const _dropIndexes: AsyncFunc<void> = promisify(MongoDb.Collection.prototype.dropIndexes);
+const _dropIndex: AsyncFunc1<string, void> = promisify(MongoDb.Collection.prototype.dropIndex);
 const _find = MongoDb.Collection.prototype.find;
 const _indexes: AsyncFunc<Array<Object>> = promisify(MongoDb.Collection.prototype.indexes);
 const _insertOne: AsyncFunc1<Object, { insertedId: string }> = promisify(MongoDb.Collection.prototype.insertOne);
 const _insertMany: AsyncFunc1<Array<Object>, { insertedIds: Array<string> }> = promisify(MongoDb.Collection.prototype.insertMany);
-const _updateOne: AsyncAction2<Object, Object> = promisify(MongoDb.Collection.prototype.updateOne);
+const _updateOne: AsyncFunc2<Object, Object, void> = promisify(MongoDb.Collection.prototype.updateOne);
 const _updateMany: AsyncFunc2<Object, Object, { result: { n: number } }> = promisify(MongoDb.Collection.prototype.updateMany);
 
 class Collection {
@@ -39,11 +39,11 @@ class Collection {
     return await _count.call(this.underlying, query, { limit, skip });
   }
 
-  async createIndex(field: Object) : Promise {
+  async createIndex(field: Object) : Promise<void> {
     await _createIndex.call(this.underlying, field);
   }
 
-  async deleteOne(filter: Object) : Promise {
+  async deleteOne(filter: Object) : Promise<void> {
     await _deleteOne.call(this.underlying, filter);
   }
 
@@ -52,7 +52,7 @@ class Collection {
     return n;
   }
 
-  async dropIndex(name: string) : Promise {
+  async dropIndex(name: string) : Promise<void> {
     await _dropIndex.call(this.underlying, name);
   }
 
@@ -61,7 +61,7 @@ class Collection {
     return this;
   }
 
-  async dropIndexes() : Promise {
+  async dropIndexes() : Promise<void> {
     await _dropIndexes.call(this.underlying);
   }
 
@@ -84,7 +84,7 @@ class Collection {
     return insertedIds.map(id => id.toString());
   }
 
-  async updateOne(selector: Object, update: Object) : Promise {
+  async updateOne(selector: Object, update: Object) : Promise<void> {
     await _updateOne.call(this.underlying, selector, update);
   }
 
